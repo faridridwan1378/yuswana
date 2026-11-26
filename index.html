@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="su" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yuswa — Studio Robah Yuswa Raray AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            studio: {
+              950: '#07090e',
+              900: '#0d111a',
+              850: '#131926',
+              800: '#1a2234',
+              700: '#26314a',
+            },
+            accent: {
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #07090e;
+      color: #f1f5f9;
+      overflow-x: hidden;
+    }
+
+    /* Custom subtle grid background */
+    .studio-bg {
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(14, 165, 233, 0.08), transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(139, 92, 246, 0.08), transparent 45%),
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+    }
+
+    /* Glassmorphic panel */
+    .glass-card {
+      background: rgba(19, 25, 38, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Custom range slider */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #0ea5e9 0%, #8b5cf6 100%);
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 20px;
+      width: 20px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 3px solid #0ea5e9;
+      margin-top: -7px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      transition: transform 0.15s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    /* Split screen comparison slider */
+    .compare-container {
+      position: relative;
+      user-select: none;
+      touch-action: none;
+      overflow: hidden;
+    }
+    .compare-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      overflow: hidden;
+    }
+    .compare-divider {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #ffffff;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.8);
+      pointer-events: none;
+    }
+    .compare-handle {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 9999px;
+      background: rgba(13, 17, 26, 0.9);
+      border: 2px solid #ffffff;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+      pointer-events: none;
+    }
+
+    /* Loading shimmer */
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.55; }
+      50% { opacity: 1; }
+    }
+    .animate-pulse-glow {
+      animation: pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  </style>
+</head>
+<body class="studio-bg min-h-screen flex flex-col justify-between antialiased selection:bg-sky-500/30 selection:text-sky-200">
+
+  <!-- Top Navigation Header -->
+  <header class="sticky top-0 z-40 border-b border-white/10 bg-studio-950/80 backdrop-blur-xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-sky-500/20">
+          <!-- Face Scan / Time SVG Icon -->
+          <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg sm:text-xl font-bold tracking-tight text-white">Yuswa <span class="text-sky-400">AI</span></h1>
+            <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-sky-500/15 text-sky-300 border border-sky-500/30">
+              Mesin Ngajaga Idéntitas
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block">Studio Robah Yuswa Raray AI</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button id="resetAllBtn" type="button" class="hidden px-3 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 transition">
+          Poto Anyar
+        </button>
+        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-medium">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Studio Sayogi</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Notification Toast Banner (Replaces alert()) -->
+  <div id="toastBanner" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 hidden max-w-md w-[92%] transition-all duration-300">
+    <div id="toastInner" class="glass-card rounded-2xl p-4 border flex items-start gap-3 shadow-2xl">
+      <div id="toastIcon" class="mt-0.5 shrink-0"></div>
+      <div class="flex-1 text-sm">
+        <p id="toastTitle" class="font-semibold text-white"></p>
+        <p id="toastMessage" class="text-slate-300 text-xs mt-0.5 leading-relaxed"></p>
+      </div>
+      <button id="toastClose" type="button" class="text-slate-400 hover:text-white p-1 rounded-lg">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Studio Workspace -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+
+      <!-- LEFT COLUMN: Upload & Age Controls (5 cols on lg) -->
+      <div class="lg:col-span-5 space-y-6">
+
+        <!-- Step 1: Portrait Upload Card -->
+        <section class="glass-card rounded-2xl p-5 sm:p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2.5">
+              <span class="w-6 h-6 rounded-lg bg-sky-500/20 text-sky-400 border border-sky-500/30 flex items-center justify-center text-xs font-bold">1</span>
+              <h2 class="text-base font-semibold text-white">Unggah Poto Raray</h2>
+            </div>
+            <span class="text-xs text-slate-400">JPG, PNG, WEBP</span>
+          </div>
+
+          <!-- Dropzone -->
+          <div id="dropZone" tabindex="0" role="button" aria-label="Unggah poto raray"
+            class="relative group rounded-2xl border-2 border-dashed border-slate-700 hover:border-sky-400/70 bg-studio-900/60 hover:bg-studio-900/90 transition-all duration-200 cursor-pointer overflow-hidden">
+            <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp" class="hidden" />
+
+            <!-- Empty Upload State -->
+            <div id="uploadPlaceholder" class="p-6 sm:p-8 text-center flex flex-col items-center justify-center">
+              <div class="w-14 h-14 rounded-2xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 mb-3 group-hover:scale-105 transition-transform">
+                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <p class="text-sm font-medium text-white">Klik atanapi sered poto ka dieu</p>
+              <p class="text-xs text-slate-400 mt-1.5 max-w-xs">Rojong JPG, PNG, WEBP (Raray nyanghareup ka payun langkung saé)</p>
+            </div>
+
+            <!-- Uploaded Image Preview State -->
+            <div id="previewWrapper" class="hidden relative">
+              <img id="sourcePreviewImg" src="" alt="Poto raray anu diunggah" class="w-full max-h-72 object-contain bg-studio-950/80 mx-auto" />
+              <div class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-studio-950 via-studio-950/80 to-transparent flex items-center justify-between">
+                <span id="fileNameLabel" class="text-xs text-slate-200 font-medium truncate max-w-[65%]">poto_raray.jpg</span>
+                <button id="changePhotoBtn" type="button" class="px-2.5 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white text-xs font-medium backdrop-blur-md transition">
+                  Ganti Poto
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Best Results Tips -->
+          <div class="mt-4 p-3.5 rounded-xl bg-studio-900/70 border border-white/5 flex items-start gap-3">
+            <svg class="w-5 h-5 text-sky-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div class="text-xs text-slate-300 space-y-1">
+              <p class="font-medium text-slate-200">Tips Pikeun Hasil Anu Akurat:</p>
+              <p class="text-slate-400 leading-relaxed">Anggo poto raray anu jelas, nyanghareup ka payun, kalayan cahaya anu rata supados ciri has sapertos panon, irung, sareng karang tetep kajaga 100%.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Step 2: Life Stage & Age Selector Card -->
+        <section class="glass-card rounded-2xl p-5 sm:p-6 space-y-5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="w-6 h-6 rounded-lg bg-sky-500/20 text-sky-400 border border-sky-500/30 flex items-center justify-center text-xs font-bold">2</span>
+              <h2 class="text-base font-semibold text-white">Pilih Tahapan Yuswa</h2>
+            </div>
+            <span id="selectedStageBadge" class="text-xs font-medium px-2.5 py-1 rounded-lg bg-sky-500/15 text-sky-300 border border-sky-500/25">
+              Budak (7–9 taun)
+            </span>
+          </div>
+
+          <!-- Quick-Select Life Stage Cards -->
+          <div id="stageGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+            <!-- Child -->
+            <button type="button" data-stage="child" data-age="8" data-label="Budak (7–9 taun)"
+              class="stage-card active-stage text-left p-3 rounded-xl border border-sky-400 bg-sky-500/15 transition-all">
+              <div class="text-lg mb-1">🧒</div>
+              <div class="text-xs font-semibold text-white">Budak</div>
+              <div class="text-[11px] text-sky-300">7–9 taun</div>
+            </button>
+
+            <!-- Teenager -->
+            <button type="button" data-stage="teenager" data-age="16" data-label="Rumaja (15–17 taun)"
+              class="stage-card text-left p-3 rounded-xl border border-white/10 bg-studio-900/60 hover:border-white/25 transition-all">
+              <div class="text-lg mb-1">🧑</div>
+              <div class="text-xs font-semibold text-white">Rumaja</div>
+              <div class="text-[11px] text-slate-400">15–17 taun</div>
+            </button>
+
+            <!-- Young Adult -->
+            <button type="button" data-stage="adult" data-age="28" data-label="Sawawa (25–35 taun)"
+              class="stage-card text-left p-3 rounded-xl border border-white/10 bg-studio-900/60 hover:border-white/25 transition-all">
+              <div class="text-lg mb-1">👩</div>
+              <div class="text-xs font-semibold text-white">Sawawa</div>
+              <div class="text-[11px] text-slate-400">25–35 taun</div>
+            </button>
+
+            <!-- Mature Adult -->
+            <button type="button" data-stage="mature" data-age="48" data-label="Kolot / Sepuh Ngora (45–55 taun)"
+              class="stage-card text-left p-3 rounded-xl border border-white/10 bg-studio-900/60 hover:border-white/25 transition-all">
+              <div class="text-lg mb-1">🧔</div>
+              <div class="text-xs font-semibold text-white">Kolot</div>
+              <div class="text-[11px] text-slate-400">45–55 taun</div>
+            </button>
+
+            <!-- Senior -->
+            <button type="button" data-stage="senior" data-age="72" data-label="Sepuh / Lansia (70+ taun)"
+              class="stage-card text-left p-3 rounded-xl border border-white/10 bg-studio-900/60 hover:border-white/25 transition-all">
+              <div class="text-lg mb-1">🧓</div>
+              <div class="text-xs font-semibold text-white">Sepuh / Lansia</div>
+              <div class="text-[11px] text-slate-400">70+ taun</div>
+            </button>
+
+            <!-- Custom Age Trigger -->
+            <button type="button" data-stage="custom" data-age="35" data-label="Yuswa Husus"
+              class="stage-card text-left p-3 rounded-xl border border-white/10 bg-studio-900/60 hover:border-white/25 transition-all">
+              <div class="text-lg mb-1">🎚️</div>
+              <div class="text-xs font-semibold text-white">Husus</div>
+              <div class="text-[11px] text-slate-400">5–85 taun</div>
+            </button>
+          </div>
+
+          <!-- Fine-Tune Age Slider -->
+          <div class="p-4 rounded-xl bg-studio-900/75 border border-white/5 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <label for="ageSlider" class="text-xs font-medium text-slate-300">Atanapi Atur Yuswa Husus (5 - 85 Taun):</label>
+              <span class="text-sm font-bold text-sky-400"><span id="ageValueDisplay">8</span> <span class="text-xs font-normal text-slate-400">taun</span></span>
+            </div>
+            <input id="ageSlider" type="range" min="5" max="85" value="8" class="w-full" />
+            <div class="flex justify-between text-[10px] text-slate-500 font-medium">
+              <span>5 taun</span>
+              <span>16 taun</span>
+              <span>30 taun</span>
+              <span>50 taun</span>
+              <span>85 taun</span>
+            </div>
+          </div>
+
+          <!-- Style & Expression Controls -->
+          <div class="space-y-2">
+            <label for="styleSelect" class="block text-xs font-medium text-slate-300">Éksprési & Gaya Poto</label>
+            <select id="styleSelect" class="w-full rounded-xl bg-studio-900 border border-white/10 px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-400">
+              <option value="original">Pertahankeun Éksprési Asli & Cahaya Alami</option>
+              <option value="smile">Imut Alami (Haneut & Naturél)</option>
+              <option value="studio">Cahaya Poto Studio Kualitas Luhur</option>
+              <option value="vintage">Gaya Poto Klasik (Film Analog)</option>
+            </select>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="pt-1 space-y-3">
+            <!-- Primary Single Stage Button -->
+            <button id="generateSingleBtn" type="button"
+              class="w-full py-3.5 px-4 rounded-xl font-semibold text-sm text-white bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 shadow-lg shadow-sky-500/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+              </svg>
+              <span id="generateSingleText">Robah Yuswa Ayeuna (8 taun)</span>
+            </button>
+
+            <!-- Batch Timeline Mode Button -->
+            <button id="generateTimelineBtn" type="button"
+              class="w-full py-3 px-4 rounded-xl font-semibold text-xs sm:text-sm text-sky-300 bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+              </svg>
+              <span>Jieun Runtuyan Yuswa Lengkep (Budak, Rumaja, Sawawa)</span>
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <!-- RIGHT COLUMN: Interactive Comparison & Timeline Gallery (7 cols on lg) -->
+      <div class="lg:col-span-7 space-y-6">
+
+        <!-- View Mode Tabs -->
+        <div class="glass-card rounded-2xl p-2 flex items-center justify-between gap-2">
+          <div class="flex items-center gap-1.5 flex-1">
+            <button id="tabCompareBtn" type="button"
+              class="flex-1 py-2.5 px-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/10 text-white shadow transition">
+              Bandingkeun (Geser)
+            </button>
+            <button id="tabResultOnlyBtn" type="button"
+              class="flex-1 py-2.5 px-2.5 rounded-xl text-xs sm:text-sm font-medium text-slate-400 hover:text-white transition">
+              Hasil Hungkul
+            </button>
+            <button id="tabTimelineBtn" type="button"
+              class="flex-1 py-2.5 px-2.5 rounded-xl text-xs sm:text-sm font-medium text-slate-400 hover:text-white transition">
+              Runtuyan Yuswa <span id="timelineCountBadge" class="ml-1 px-1.5 py-0.5 text-[10px] rounded-full bg-sky-500/20 text-sky-300">0</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Loading State Overlay Card -->
+        <div id="loadingCard" class="hidden glass-card rounded-2xl p-8 sm:p-10 text-center space-y-5 border border-sky-500/30">
+          <div class="relative w-20 h-20 mx-auto">
+            <div class="absolute inset-0 rounded-full border-4 border-sky-500/20"></div>
+            <div class="absolute inset-0 rounded-full border-4 border-t-sky-400 border-r-indigo-500 animate-spin"></div>
+            <div class="absolute inset-3 rounded-full bg-sky-500/10 flex items-center justify-center text-sky-400 animate-pulse-glow">
+              <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+          </div>
+          <div class="space-y-1.5">
+            <h3 id="loadingTitle" class="text-lg font-bold text-white">Nuju ngolah raray sareng ngajaga ciri hasna...</h3>
+            <p id="loadingSubtitle" class="text-xs sm:text-sm text-slate-400 max-w-md mx-auto">
+              Nuju nyaluyukeun struktur raray bari ngajaga wangun panon, irung, warna kulit, sareng karang asli.
+            </p>
+          </div>
+          <!-- Progress Bar -->
+          <div class="max-w-sm mx-auto">
+            <div class="h-2 w-full rounded-full bg-studio-900 overflow-hidden">
+              <div id="loadingProgressBar" class="h-full bg-gradient-to-r from-sky-400 to-indigo-500 transition-all duration-500" style="width: 25%"></div>
+            </div>
+            <p id="loadingStepText" class="text-[11px] text-sky-300 mt-2 font-medium">Léngkah 1 tina 1 • Prosés AI</p>
+          </div>
+        </div>
+
+        <!-- VIEW 1 & 2: Before / After Split-Screen Comparison & Result Only -->
+        <section id="compareViewSection" class="glass-card rounded-2xl p-5 sm:p-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h3 id="compareSectionTitle" class="text-base font-semibold text-white">Pamariksaan Raray Sateuacan & Saatosna</h3>
+              <p id="compareSectionSubtitle" class="text-xs text-slate-400">Geser garis ka kénca atanapi ka katuhu pikeun ningali parobahanana</p>
+            </div>
+            <button id="downloadSingleBtn" type="button" disabled
+              class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 text-white disabled:opacity-40 disabled:cursor-not-allowed transition flex items-center gap-1.5">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <span>Unduh Hasil</span>
+            </button>
+          </div>
+
+          <!-- Empty State Before Generation -->
+          <div id="compareEmptyState" class="rounded-2xl border border-white/10 bg-studio-900/50 min-h-[380px] sm:min-h-[440px] flex flex-col items-center justify-center p-6 text-center">
+            <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 mb-4">
+              <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </div>
+            <h4 class="text-sm sm:text-base font-semibold text-white">Hasil Parobahan Yuswa Bakal Némbongan di Dieu</h4>
+            <p class="text-xs text-slate-400 max-w-sm mt-1.5 leading-relaxed">
+              Unggah poto teras pilih tahapan yuswa pikeun ngamimitian.
+            </p>
+          </div>
+
+          <!-- Interactive Split Slider Container -->
+          <div id="compareActiveStage" class="hidden space-y-3">
+            <div id="compareBox" class="compare-container rounded-2xl bg-studio-950 border border-white/10 w-full aspect-[4/5] max-h-[540px] mx-auto">
+              <!-- After (Generated) Base Image -->
+              <img id="compareAfterImg" src="" alt="Hasil Parobahan Yuswa AI" class="w-full h-full object-contain select-none pointer-events-none" />
+
+              <!-- Before (Original) Clipped Overlay -->
+              <div id="compareOverlay" class="compare-overlay" style="width: 50%;">
+                <img id="compareBeforeImg" src="" alt="Poto Asli" class="h-full max-w-none object-contain select-none pointer-events-none" />
+              </div>
+
+              <!-- Labels -->
+              <span id="compareLeftBadge" class="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-studio-950/80 backdrop-blur-md border border-white/15 text-[11px] font-semibold text-white pointer-events-none">
+                Asli
+              </span>
+              <span id="compareTargetBadge" class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-sky-500/85 backdrop-blur-md border border-sky-300/30 text-[11px] font-semibold text-white pointer-events-none">
+                Hasil AI • 8 taun
+              </span>
+
+              <!-- Vertical Divider & Handle -->
+              <div id="compareDivider" class="compare-divider" style="left: 50%;">
+                <div class="compare-handle">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4" transform="rotate(90 12 12)" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Biometric Preservation Summary -->
+            <div class="p-3.5 rounded-xl bg-studio-900/80 border border-white/5 flex flex-wrap items-center justify-between gap-2 text-xs">
+              <div class="flex items-center gap-2 text-emerald-400 font-medium">
+                <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Ciri has raray (panon, irung, karang, sareng warna kulit) tetep kajaga.</span>
+              </div>
+              <span id="generationMetaLabel" class="text-slate-400">Yuswa: 8 taun</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 3: Side-by-Side Timeline Grid -->
+        <section id="timelineViewSection" class="hidden glass-card rounded-2xl p-5 sm:p-6 space-y-5">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h3 class="text-base font-semibold text-white">Runtuyan Tahapan Yuswa</h3>
+              <p class="text-xs text-slate-400">Babandingan parobahan raray ti budak dugi ka sawawa</p>
+            </div>
+            <button id="downloadCollageBtn" type="button" disabled
+              class="px-4 py-2 rounded-xl text-xs font-semibold bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white shadow-md disabled:opacity-40 disabled:cursor-not-allowed transition flex items-center gap-1.5">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span>Unduh Kolase Runtuyan Yuswa</span>
+            </button>
+          </div>
+
+          <!-- Dynamic Timeline Cards Grid -->
+          <div id="timelineGridContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Subtle Footer Credit -->
+  <footer class="border-t border-white/10 bg-studio-950/80 py-5 mt-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
+      <div class="flex items-center gap-2">
+        <p class="font-medium text-slate-300">Yuswa • Studio Parobahan Yuswa Raray</p>
+        <span class="text-slate-600">•</span>
+        <p class="text-slate-400">© made by farid ridwan 2026</p>
+      </div>
+      <p>Téknologi Biometrik AI pikeun Ngajaga Idéntitas & Ciri Has Raray</p>
+    </div>
+  </footer>
+
+  <!-- Hidden Canvas for Timeline Collage Generation -->
+  <canvas id="collageCanvas" class="hidden"></canvas>
+
+  <script>
+    /**
+     * Yuswa AI — Application State & Logic (Basa Sunda UI)
+     */
+    const state = {
+      sourceBase64: null,       // Pure base64 string without data: prefix
+      sourceMimeType: null,     // e.g. 'image/jpeg'
+      sourceDataUrl: null,      // Full data URL for display
+      fileName: 'poto_raray.jpg',
+      selectedStage: 'child',
+      targetAge: 8,
+      stylePreset: 'original',
+      activeViewTab: 'compare', // 'compare' | 'resultOnly' | 'timeline'
+      isGenerating: false,
+      currentCompareItem: null, // { id, label, age, dataUrl, timestamp }
+      timelineItems: [],        // Array of { id, label, age, dataUrl, isOriginal }
+      sliderPercent: 50
+    };
+
+    // DOM Elements
+    const el = {
+      dropZone: document.getElementById('dropZone'),
+      fileInput: document.getElementById('fileInput'),
+      uploadPlaceholder: document.getElementById('uploadPlaceholder'),
+      previewWrapper: document.getElementById('previewWrapper'),
+      sourcePreviewImg: document.getElementById('sourcePreviewImg'),
+      fileNameLabel: document.getElementById('fileNameLabel'),
+      changePhotoBtn: document.getElementById('changePhotoBtn'),
+      resetAllBtn: document.getElementById('resetAllBtn'),
+
+      stageCards: document.querySelectorAll('.stage-card'),
+      selectedStageBadge: document.getElementById('selectedStageBadge'),
+      ageSlider: document.getElementById('ageSlider'),
+      ageValueDisplay: document.getElementById('ageValueDisplay'),
+      styleSelect: document.getElementById('styleSelect'),
+
+      generateSingleBtn: document.getElementById('generateSingleBtn'),
+      generateSingleText: document.getElementById('generateSingleText'),
+      generateTimelineBtn: document.getElementById('generateTimelineBtn'),
+
+      tabCompareBtn: document.getElementById('tabCompareBtn'),
+      tabResultOnlyBtn: document.getElementById('tabResultOnlyBtn'),
+      tabTimelineBtn: document.getElementById('tabTimelineBtn'),
+      timelineCountBadge: document.getElementById('timelineCountBadge'),
+
+      loadingCard: document.getElementById('loadingCard'),
+      loadingTitle: document.getElementById('loadingTitle'),
+      loadingSubtitle: document.getElementById('loadingSubtitle'),
+      loadingProgressBar: document.getElementById('loadingProgressBar'),
+      loadingStepText: document.getElementById('loadingStepText'),
+
+      compareViewSection: document.getElementById('compareViewSection'),
+      compareSectionTitle: document.getElementById('compareSectionTitle'),
+      compareSectionSubtitle: document.getElementById('compareSectionSubtitle'),
+      compareEmptyState: document.getElementById('compareEmptyState'),
+      compareActiveStage: document.getElementById('compareActiveStage'),
+      compareBox: document.getElementById('compareBox'),
+      compareAfterImg: document.getElementById('compareAfterImg'),
+      compareBeforeImg: document.getElementById('compareBeforeImg'),
+      compareOverlay: document.getElementById('compareOverlay'),
+      compareDivider: document.getElementById('compareDivider'),
+      compareLeftBadge: document.getElementById('compareLeftBadge'),
+      compareTargetBadge: document.getElementById('compareTargetBadge'),
+      generationMetaLabel: document.getElementById('generationMetaLabel'),
+      downloadSingleBtn: document.getElementById('downloadSingleBtn'),
+
+      timelineViewSection: document.getElementById('timelineViewSection'),
+      timelineGridContainer: document.getElementById('timelineGridContainer'),
+      downloadCollageBtn: document.getElementById('downloadCollageBtn'),
+      collageCanvas: document.getElementById('collageCanvas'),
+
+      toastBanner: document.getElementById('toastBanner'),
+      toastInner: document.getElementById('toastInner'),
+      toastIcon: document.getElementById('toastIcon'),
+      toastTitle: document.getElementById('toastTitle'),
+      toastMessage: document.getElementById('toastMessage'),
+      toastClose: document.getElementById('toastClose')
+    };
+
+    /**
+     * Show non-blocking notification toast (replaces alert())
+     */
+    let toastTimer = null;
+    function showToast(title, message, type = 'info') {
+      clearTimeout(toastTimer);
+      el.toastTitle.textContent = title;
+      el.toastMessage.textContent = message;
+
+      el.toastInner.classList.remove('border-red-500/40', 'border-emerald-500/40', 'border-sky-500/40');
+      if (type === 'error') {
+        el.toastInner.classList.add('border-red-500/40');
+        el.toastIcon.innerHTML = `<svg class="w-5 h-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+      } else if (type === 'success') {
+        el.toastInner.classList.add('border-emerald-500/40');
+        el.toastIcon.innerHTML = `<svg class="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+      } else {
+        el.toastInner.classList.add('border-sky-500/40');
+        el.toastIcon.innerHTML = `<svg class="w-5 h-5 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+      }
+
+      el.toastBanner.classList.remove('hidden');
+      toastTimer = setTimeout(() => {
+        el.toastBanner.classList.add('hidden');
+      }, 5500);
+    }
+
+    el.toastClose.addEventListener('click', () => {
+      el.toastBanner.classList.add('hidden');
+    });
+
+    /**
+     * Handle Image File Upload & Validation
+     */
+    function processImageFile(file) {
+      if (!file) return;
+      const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+      if (!validTypes.includes(file.type)) {
+        showToast('Format File Teu Dirojong', 'Mangga unggah poto raray dina format JPG, PNG, atanapi WEBP.', 'error');
+        return;
+      }
+      if (file.size > 12 * 1024 * 1024) {
+        showToast('Ukuran File Ageung Teuing', 'Mangga pilih poto anu ukuranna kirang ti 12MB.', 'error');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const dataUrl = e.target.result;
+        // Resize if excessively large to ensure fast, reliable API payloads
+        const img = new Image();
+        img.onload = () => {
+          const maxDim = 1280;
+          let w = img.width;
+          let h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) {
+              h = Math.round((h * maxDim) / w);
+              w = maxDim;
+            } else {
+              w = Math.round((w * maxDim) / h);
+              h = maxDim;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+
+          const optimizedDataUrl = canvas.toDataURL('image/jpeg', 0.92);
+          state.sourceDataUrl = optimizedDataUrl;
+          state.sourceMimeType = 'image/jpeg';
+          state.sourceBase64 = optimizedDataUrl.split(',')[1];
+          state.fileName = file.name;
+
+          // Update UI
+          el.sourcePreviewImg.src = optimizedDataUrl;
+          el.fileNameLabel.textContent = file.name;
+          el.uploadPlaceholder.classList.add('hidden');
+          el.previewWrapper.classList.remove('hidden');
+          el.resetAllBtn.classList.remove('hidden');
+
+          // Reset previous results and initialize timeline with Original
+          state.currentCompareItem = null;
+          state.timelineItems = [
+            {
+              id: 'original',
+              label: 'Poto Asli',
+              age: 'Asli',
+              dataUrl: optimizedDataUrl,
+              isOriginal: true
+            }
+          ];
+          el.compareActiveStage.classList.add('hidden');
+          el.compareEmptyState.classList.remove('hidden');
+          el.downloadSingleBtn.disabled = true;
+          renderTimelineGrid();
+
+          showToast('Poto Parantos Diunggah', 'Pilih tahapan yuswa atanapi klik Jieun Runtuyan Yuswa Lengkep.', 'success');
+        };
+        img.src = dataUrl;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Dropzone event listeners
+    el.dropZone.addEventListener('click', (e) => {
+      if (e.target.closest('#changePhotoBtn')) return;
+      el.fileInput.click();
+    });
+    el.dropZone.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        el.fileInput.click();
+      }
+    });
+    el.changePhotoBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      el.fileInput.click();
+    });
+    el.fileInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files[0]) {
+        processImageFile(e.target.files[0]);
+      }
+    });
+
+    el.dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      el.dropZone.classList.add('border-sky-400', 'bg-sky-500/10');
+    });
+    el.dropZone.addEventListener('dragleave', () => {
+      el.dropZone.classList.remove('border-sky-400', 'bg-sky-500/10');
+    });
+    el.dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      el.dropZone.classList.remove('border-sky-400', 'bg-sky-500/10');
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        processImageFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    el.resetAllBtn.addEventListener('click', () => {
+      state.sourceBase64 = null;
+      state.sourceDataUrl = null;
+      state.currentCompareItem = null;
+      state.timelineItems = [];
+      el.fileInput.value = '';
+      el.previewWrapper.classList.add('hidden');
+      el.uploadPlaceholder.classList.remove('hidden');
+      el.resetAllBtn.classList.add('hidden');
+      el.compareActiveStage.classList.add('hidden');
+      el.compareEmptyState.classList.remove('hidden');
+      el.downloadSingleBtn.disabled = true;
+      renderTimelineGrid();
+    });
+
+    /**
+     * Stage Cards & Age Slider Synchronization
+     */
+    function updateSelectedAgeUI(age, stageKey, badgeLabel) {
+      state.targetAge = Number(age);
+      if (stageKey) state.selectedStage = stageKey;
+
+      el.ageSlider.value = state.targetAge;
+      el.ageValueDisplay.textContent = state.targetAge;
+      el.generateSingleText.textContent = `Robah Yuswa Ayeuna (${state.targetAge} taun)`;
+
+      if (badgeLabel) {
+        el.selectedStageBadge.textContent = badgeLabel;
+      } else {
+        el.selectedStageBadge.textContent = `Husus (${state.targetAge} taun)`;
+      }
+
+      el.stageCards.forEach(card => {
+        const isMatch = card.dataset.stage === state.selectedStage;
+        if (isMatch) {
+          card.classList.add('border-sky-400', 'bg-sky-500/15');
+          card.classList.remove('border-white/10', 'bg-studio-900/60');
+        } else {
+          card.classList.remove('border-sky-400', 'bg-sky-500/15');
+          card.classList.add('border-white/10', 'bg-studio-900/60');
+        }
+      });
+    }
+
+    el.stageCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const stage = card.dataset.stage;
+        const age = Number(card.dataset.age);
+        const label = card.dataset.label;
+        updateSelectedAgeUI(age, stage, label);
+      });
+    });
+
+    el.ageSlider.addEventListener('input', (e) => {
+      const val = Number(e.target.value);
+      let stage = 'custom';
+      let label = `Husus (${val} taun)`;
+      if (val >= 5 && val <= 11) { stage = 'child'; label = `Budak (${val} taun)`; }
+      else if (val >= 12 && val <= 19) { stage = 'teenager'; label = `Rumaja (${val} taun)`; }
+      else if (val >= 20 && val <= 38) { stage = 'adult'; label = `Sawawa (${val} taun)`; }
+      else if (val >= 39 && val <= 60) { stage = 'mature'; label = `Kolot (${val} taun)`; }
+      else if (val >= 61) { stage = 'senior'; label = `Sepuh / Lansia (${val} taun)`; }
+
+      updateSelectedAgeUI(val, stage, label);
+    });
+
+    el.styleSelect.addEventListener('change', (e) => {
+      state.stylePreset = e.target.value;
+    });
+
+    /**
+     * View Tabs Switching ('compare' | 'resultOnly' | 'timeline')
+     */
+    function switchTab(tab) {
+      state.activeViewTab = tab;
+      const activeClasses = 'flex-1 py-2.5 px-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/10 text-white shadow transition';
+      const inactiveClasses = 'flex-1 py-2.5 px-2.5 rounded-xl text-xs sm:text-sm font-medium text-slate-400 hover:text-white transition';
+
+      el.tabCompareBtn.className = tab === 'compare' ? activeClasses : inactiveClasses;
+      el.tabResultOnlyBtn.className = tab === 'resultOnly' ? activeClasses : inactiveClasses;
+      el.tabTimelineBtn.className = tab === 'timeline' ? activeClasses : inactiveClasses;
+
+      if (tab === 'timeline') {
+        el.timelineViewSection.classList.remove('hidden');
+        el.compareViewSection.classList.add('hidden');
+      } else {
+        el.compareViewSection.classList.remove('hidden');
+        el.timelineViewSection.classList.add('hidden');
+
+        if (tab === 'resultOnly') {
+          el.compareSectionTitle.textContent = 'Hasil Parobahan Yuswa (Tampilan Penuh)';
+          el.compareSectionSubtitle.textContent = 'Ningali hasil parobahan yuswa raray sacara gembleng';
+          el.compareOverlay.classList.add('hidden');
+          el.compareDivider.classList.add('hidden');
+          el.compareLeftBadge.classList.add('hidden');
+        } else {
+          el.compareSectionTitle.textContent = 'Pamariksaan Raray Sateuacan & Saatosna';
+          el.compareSectionSubtitle.textContent = 'Geser garis ka kénca atanapi ka katuhu pikeun ningali parobahanana';
+          el.compareOverlay.classList.remove('hidden');
+          el.compareDivider.classList.remove('hidden');
+          el.compareLeftBadge.classList.remove('hidden');
+          requestAnimationFrame(() => {
+            syncCompareImageDimensions();
+            updateSliderPosition(state.sliderPercent);
+          });
+        }
+      }
+    }
+
+    el.tabCompareBtn.addEventListener('click', () => switchTab('compare'));
+    el.tabResultOnlyBtn.addEventListener('click', () => switchTab('resultOnly'));
+    el.tabTimelineBtn.addEventListener('click', () => switchTab('timeline'));
+
+    /**
+     * Build Biometric Age Prompt for Gemini Image Editing
+     * (Kept in English for optimal anatomical fidelity & image quality)
+     */
+    function buildBiometricAgePrompt(targetAge, stageLabel, stylePreset) {
+      let ageBiologyDetails = '';
+      if (targetAge <= 11) {
+        ageBiologyDetails = `a ${targetAge}-year-old child. Show natural pediatric craniofacial proportions: softer jawline, fuller cheeks, smooth youthful skin without wrinkles, age-appropriate neck/shoulder proportions, and natural childlike hair texture while keeping the exact same hair color, hairline pattern, and curl/straightness.`;
+      } else if (targetAge <= 19) {
+        ageBiologyDetails = `a ${targetAge}-year-old teenager. Show natural adolescent facial structure: emerging jawline definition, youthful skin elasticity, subtle natural skin pores/texture, and age-appropriate neck/clothing proportions while keeping the exact hair color and natural style.`;
+      } else if (targetAge <= 38) {
+        ageBiologyDetails = `a ${targetAge}-year-old young adult in their prime. Show fully developed adult bone structure, balanced facial volume, natural skin texture with realistic micro-pores, and authentic adult proportions.`;
+      } else if (targetAge <= 60) {
+        ageBiologyDetails = `a ${targetAge}-year-old middle-aged mature adult. Show realistic natural aging: subtle nasolabial folds, fine crow's feet around the eyes, slight forehead expression lines, realistic skin texture, and subtle natural silver/gray strands blended into their original hair color.`;
+      } else {
+        ageBiologyDetails = `a ${targetAge}-year-old senior adult. Show authentic, dignified elderly features: natural skin laxity, realistic deep expression lines and wrinkles around the eyes, forehead, and mouth, natural age spots/texture, and silver-gray/white hair retaining their original hair pattern.`;
+      }
+
+      let styleInstruction = '';
+      if (stylePreset === 'smile') {
+        styleInstruction = 'Give the subject a subtle, warm, natural closed-mouth or gentle smile while keeping eye crinkles authentic.';
+      } else if (stylePreset === 'studio') {
+        styleInstruction = 'Use clean, high-definition softbox studio portrait lighting with subtle depth of field and crisp skin detail.';
+      } else if (stylePreset === 'vintage') {
+        styleInstruction = 'Render with subtle authentic 35mm analog film grain and natural color warmth matching a real candid photograph.';
+      } else {
+        styleInstruction = 'Preserve the exact facial expression, head angle, gaze direction, lighting direction, and background atmosphere of the original photograph.';
+      }
+
+      return `Edit the provided portrait photograph so that the exact same person appears realistically as ${ageBiologyDetails}
+CRITICAL IDENTITY PRESERVATION RULES:
+1. Maintain 100% unmistakable facial identity of the person in the input image.
+2. Strictly preserve their exact eye shape, eye color, interpupillary distance, eyelid crease, and eyebrow shape.
+3. Strictly preserve their exact nose bridge, nostril shape, nose tip, lip shape, and philtrum.
+4. Strictly preserve their ethnic heritage, natural skin undertone, freckles, moles, beauty marks, or distinctive facial scars in their exact anatomical locations.
+5. ${styleInstruction}
+6. Output a raw, photorealistic, unretouched portrait photograph with natural skin pores and realistic lighting—never plastic, airbrushed, or CGI.`;
+    }
+
+    /**
+     * Call Gemini Image Editing API with Exponential Backoff
+     */
+    async function generateAgedPortrait(targetAge, stageLabel) {
+      const apiKey = ""; // Runtime-provided key
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${apiKey}`;
+
+      const promptText = buildBiometricAgePrompt(targetAge, stageLabel, state.stylePreset);
+
+      const payload = {
+        contents: [
+          {
+            role: "user",
+            parts: [
+              { text: promptText },
+              {
+                inlineData: {
+                  mimeType: state.sourceMimeType,
+                  data: state.sourceBase64
+                }
+              }
+            ]
+          }
+        ],
+        generationConfig: {
+          responseModalities: ['TEXT', 'IMAGE']
+        }
+      };
+
+      const maxRetries = 4;
+      let delay = 1200;
+
+      for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (!response.ok) {
+            if ((response.status === 429 || response.status >= 500) && attempt < maxRetries) {
+              await new Promise(res => setTimeout(res, delay));
+              delay *= 2;
+              continue;
+            }
+            const errText = await response.text();
+            throw new Error(`Status API ${response.status}: ${errText.slice(0, 140)}`);
+          }
+
+          const result = await response.json();
+          const candidate = result?.candidates?.[0];
+
+          if (!candidate || candidate.finishReason === 'SAFETY') {
+            throw new Error('Poto teu tiasa diprosés kusabab kawijakan kaamanan. Mangga cobian poto sanés anu langkung jelas.');
+          }
+
+          const imagePart = candidate.content?.parts?.find(p => p.inlineData && p.inlineData.data);
+          if (!imagePart) {
+            throw new Error('Teu aya data gambar anu dihasilkeun ku modél. Mangga cobian deui.');
+          }
+
+          const mime = imagePart.inlineData.mimeType || 'image/png';
+          return `data:${mime};base64,${imagePart.inlineData.data}`;
+        } catch (err) {
+          if (attempt === maxRetries) {
+            throw err;
+          }
+          await new Promise(res => setTimeout(res, delay));
+          delay *= 2;
+        }
+      }
+    }
+
+    /**
+     * Set UI Loading State
+     */
+    function setLoadingState(active, title = '', subtitle = '', progress = 20, stepText = '') {
+      state.isGenerating = active;
+      el.generateSingleBtn.disabled = active;
+      el.generateTimelineBtn.disabled = active;
+
+      if (active) {
+        el.loadingTitle.textContent = title;
+        el.loadingSubtitle.textContent = subtitle;
+        el.loadingProgressBar.style.width = `${progress}%`;
+        el.loadingStepText.textContent = stepText;
+        el.loadingCard.classList.remove('hidden');
+      } else {
+        el.loadingCard.classList.add('hidden');
+      }
+    }
+
+    /**
+     * Update Split-Screen Comparison View
+     */
+    function displayComparisonResult(item) {
+      state.currentCompareItem = item;
+      el.compareBeforeImg.src = state.sourceDataUrl;
+      el.compareAfterImg.src = item.dataUrl;
+      el.compareTargetBadge.textContent = `Hasil AI • ${item.label} (${item.age} taun)`;
+      el.generationMetaLabel.textContent = `Tahapan: ${item.label} • Yuswa ${item.age} taun`;
+
+      el.compareEmptyState.classList.add('hidden');
+      el.compareActiveStage.classList.remove('hidden');
+      el.downloadSingleBtn.disabled = false;
+
+      // Sync overlay image width to container width
+      requestAnimationFrame(() => {
+        syncCompareImageDimensions();
+        updateSliderPosition(50);
+      });
+    }
+
+    function syncCompareImageDimensions() {
+      const boxWidth = el.compareBox.clientWidth;
+      if (boxWidth > 0) {
+        el.compareBeforeImg.style.width = `${boxWidth}px`;
+      }
+    }
+    window.addEventListener('resize', syncCompareImageDimensions);
+
+    function updateSliderPosition(percent) {
+      const clamped = Math.max(2, Math.min(98, percent));
+      state.sliderPercent = clamped;
+      el.compareOverlay.style.width = `${clamped}%`;
+      el.compareDivider.style.left = `${clamped}%`;
+    }
+
+    // Pointer & Touch Events for Split-Screen Comparison
+    let isDraggingSlider = false;
+    function handleSliderMove(clientX) {
+      if (state.activeViewTab !== 'compare') return;
+      const rect = el.compareBox.getBoundingClientRect();
+      if (rect.width <= 0) return;
+      const x = clientX - rect.left;
+      const pct = (x / rect.width) * 100;
+      updateSliderPosition(pct);
+    }
+
+    el.compareBox.addEventListener('mousedown', (e) => {
+      isDraggingSlider = true;
+      handleSliderMove(e.clientX);
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (!isDraggingSlider) return;
+      handleSliderMove(e.clientX);
+    });
+    window.addEventListener('mouseup', () => {
+      isDraggingSlider = false;
+    });
+
+    el.compareBox.addEventListener('touchstart', (e) => {
+      isDraggingSlider = true;
+      if (e.touches[0]) handleSliderMove(e.touches[0].clientX);
+    }, { passive: true });
+    window.addEventListener('touchmove', (e) => {
+      if (!isDraggingSlider || !e.touches[0]) return;
+      handleSliderMove(e.touches[0].clientX);
+    }, { passive: true });
+    window.addEventListener('touchend', () => {
+      isDraggingSlider = false;
+    });
+
+    /**
+     * Add or Update Item in Timeline Array & Re-Render Grid
+     */
+    function upsertTimelineItem(newItem) {
+      const existingIndex = state.timelineItems.findIndex(i => i.id === newItem.id);
+      if (existingIndex >= 0) {
+        state.timelineItems[existingIndex] = newItem;
+      } else {
+        state.timelineItems.push(newItem);
+      }
+      // Sort chronologically: Original first, then ascending age
+      state.timelineItems.sort((a, b) => {
+        if (a.isOriginal) return -1;
+        if (b.isOriginal) return 1;
+        return Number(a.age) - Number(b.age);
+      });
+      renderTimelineGrid();
+    }
+
+    function renderTimelineGrid() {
+      const generatedCount = state.timelineItems.filter(i => !i.isOriginal).length;
+      el.timelineCountBadge.textContent = generatedCount;
+      el.downloadCollageBtn.disabled = generatedCount === 0;
+
+      if (state.timelineItems.length === 0) {
+        el.timelineGridContainer.innerHTML = `
+          <div class="col-span-full py-12 text-center text-slate-400 text-xs">
+            Unggah poto teras pilih tahapan yuswa pikeun ningali runtuyan yuswa di dieu.
+          </div>
+        `;
+        return;
+      }
+
+      el.timelineGridContainer.innerHTML = state.timelineItems.map(item => `
+        <div class="rounded-2xl bg-studio-900/80 border border-white/10 overflow-hidden flex flex-col group">
+          <div class="relative aspect-[4/5] bg-studio-950 overflow-hidden">
+            <img src="${item.dataUrl}" alt="${item.label}" class="w-full h-full object-contain group-hover:scale-[1.02] transition-transform duration-300" />
+            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-[11px] font-semibold backdrop-blur-md border ${
+              item.isOriginal
+                ? 'bg-studio-950/80 text-slate-200 border-white/15'
+                : 'bg-sky-500/85 text-white border-sky-300/30'
+            }">
+              ${item.isOriginal ? 'Poto Asli' : `${item.label} • ${item.age} taun`}
+            </span>
+          </div>
+          <div class="p-3.5 flex items-center justify-between gap-2 border-t border-white/5">
+            <div>
+              <p class="text-xs font-semibold text-white">${item.label}</p>
+              <p class="text-[11px] text-slate-400">${item.isOriginal ? 'Idéntitas Rujukan' : `Yuswa: ${item.age} taun`}</p>
+            </div>
+            <div class="flex items-center gap-1.5">
+              ${!item.isOriginal ? `
+                <button type="button" onclick="inspectTimelineItem('${item.id}')"
+                  class="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/15 text-xs font-medium text-sky-300 transition" title="Bandingkeun Sateuacan & Saatosna">
+                  Bandingkeun
+                </button>
+              ` : ''}
+              <button type="button" onclick="downloadDataUrl('${item.dataUrl}', 'Yuswa_${item.label.replace(/[\s\/]+/g, '_')}.png')"
+                class="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition" title="Unduh Poto">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Global helper for inline onclick handlers
+    window.inspectTimelineItem = function(id) {
+      const found = state.timelineItems.find(i => i.id === id);
+      if (found && !found.isOriginal) {
+        displayComparisonResult(found);
+        switchTab('compare');
+      }
+    };
+
+    window.downloadDataUrl = function(dataUrl, filename) {
+      const link = document.createElement('a');
+      link.href = dataUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
+    /**
+     * Single Age Stage Generation Handler
+     */
+    el.generateSingleBtn.addEventListener('click', async () => {
+      if (!state.sourceBase64) {
+        showToast('Teu Acan Aya Poto', 'Mangga unggah poto raray heula sateuacan ngamimitian.', 'error');
+        return;
+      }
+      if (state.isGenerating) return;
+
+      const age = state.targetAge;
+      const stageNameMap = {
+        child: 'Budak',
+        teenager: 'Rumaja',
+        adult: 'Sawawa',
+        mature: 'Kolot / Sepuh Ngora',
+        senior: 'Sepuh / Lansia',
+        custom: `Yuswa ${age}`
+      };
+      const label = stageNameMap[state.selectedStage] || `Yuswa ${age}`;
+
+      switchTab('compare');
+      setLoadingState(
+        true,
+        'Nuju ngolah raray sareng ngajaga ciri hasna...',
+        `Nyaluyukeun raray kana tahapan ${label} (${age} taun) bari ngajaga panon, irung, karang, sareng warna kulit.`,
+        45,
+        `Ngolah tahapan ${label} (${age} taun)...`
+      );
+
+      try {
+        const resultDataUrl = await generateAgedPortrait(age, label);
+        el.loadingProgressBar.style.width = '100%';
+
+        const newItem = {
+          id: `age_${age}`,
+          label,
+          age,
+          dataUrl: resultDataUrl,
+          isOriginal: false
+        };
+
+        displayComparisonResult(newItem);
+        upsertTimelineItem(newItem);
+        showToast('Parobahan Yuswa Rengsé', `Poto tahapan ${label} (${age} taun) parantos hasil didamel kalayan ngajaga ciri has raray.`, 'success');
+      } catch (err) {
+        console.error(err);
+        showToast('Gagal Ngolah Poto', err.message || 'Aya gangguan nalika ngolah poto. Mangga cobian deui.', 'error');
+      } finally {
+        setLoadingState(false);
+      }
+    });
+
+    /**
+     * Batch Timeline Generation Handler (Budak, Rumaja & Sawawa)
+     */
+    el.generateTimelineBtn.addEventListener('click', async () => {
+      if (!state.sourceBase64) {
+        showToast('Teu Acan Aya Poto', 'Mangga unggah poto raray heula sateuacan ngamimitian.', 'error');
+        return;
+      }
+      if (state.isGenerating) return;
+
+      const stages = [
+        { id: 'age_8', label: 'Budak', age: 8 },
+        { id: 'age_16', label: 'Rumaja', age: 16 },
+        { id: 'age_28', label: 'Sawawa', age: 28 }
+      ];
+
+      switchTab('timeline');
+
+      try {
+        for (let i = 0; i < stages.length; i++) {
+          const st = stages[i];
+          const pct = Math.round(((i + 0.4) / stages.length) * 100);
+          setLoadingState(
+            true,
+            `Nuju ngadamel runtuyan yuswa... (${i + 1} tina ${stages.length})`,
+            `Nuju ngolah tahapan ${st.label} (${st.age} taun) bari ngajaga ciri has raray...`,
+            pct,
+            `Tahapan ${i + 1}/${stages.length}: ${st.label} (${st.age} taun)`
+          );
+
+          const resultDataUrl = await generateAgedPortrait(st.age, st.label);
+          const item = {
+            id: st.id,
+            label: st.label,
+            age: st.age,
+            dataUrl: resultDataUrl,
+            isOriginal: false
+          };
+
+          upsertTimelineItem(item);
+          if (i === stages.length - 1) {
+            displayComparisonResult(item);
+          }
+        }
+
+        showToast('Runtuyan Yuswa Rengsé', 'Poto Budak, Rumaja, sareng Sawawa parantos siap! Mangga unduh hiji-hiji atanapi dina wangun kolase.', 'success');
+      } catch (err) {
+        console.error(err);
+        showToast('Prosés Kaganggu', err.message || 'Aya kalepatan nalika ngadamel runtuyan yuswa.', 'error');
+      } finally {
+        setLoadingState(false);
+      }
+    });
+
+    /**
+     * Download Single Result Button
+     */
+    el.downloadSingleBtn.addEventListener('click', () => {
+      if (!state.currentCompareItem) return;
+      const safeName = state.currentCompareItem.label.replace(/[\s\/]+/g, '_');
+      window.downloadDataUrl(state.currentCompareItem.dataUrl, `Yuswa_${safeName}_${state.currentCompareItem.age}_taun.png`);
+    });
+
+    /**
+     * Generate & Download Stitched Timeline Collage via HTML5 Canvas
+     */
+    el.downloadCollageBtn.addEventListener('click', async () => {
+      if (state.timelineItems.length < 2) return;
+
+      try {
+        const items = state.timelineItems;
+        const loadedImages = await Promise.all(
+          items.map(item => new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => resolve({ img, item });
+            img.onerror = reject;
+            img.src = item.dataUrl;
+          }))
+        );
+
+        const cardW = 420;
+        const cardH = 520;
+        const padding = 28;
+        const headerH = 84;
+        const footerH = 44;
+
+        const totalW = padding + loadedImages.length * (cardW + padding);
+        const totalH = headerH + cardH + footerH + padding;
+
+        const canvas = el.collageCanvas;
+        canvas.width = totalW;
+        canvas.height = totalH;
+        const ctx = canvas.getContext('2d');
+
+        // Background
+        ctx.fillStyle = '#07090e';
+        ctx.fillRect(0, 0, totalW, totalH);
+
+        // Header Title
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 28px Inter, sans-serif';
+        ctx.fillText('Yuswa AI — Runtuyan Parobahan Yuswa Raray', padding, 48);
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '15px Inter, sans-serif';
+        ctx.fillText('Ciri has raray (panon, irung, karang, sareng warna kulit) tetep kajaga', padding, 72);
+
+        // Draw each portrait card
+        loadedImages.forEach(({ img, item }, idx) => {
+          const x = padding + idx * (cardW + padding);
+          const y = headerH;
+
+          // Card frame
+          ctx.fillStyle = '#131926';
+          ctx.fillRect(x, y, cardW, cardH);
+
+          // Fit image cleanly inside top 445px of card
+          const imgAreaH = 445;
+          const scale = Math.min(cardW / img.width, imgAreaH / img.height);
+          const drawW = img.width * scale;
+          const drawH = img.height * scale;
+          const drawX = x + (cardW - drawW) / 2;
+          const drawY = y + (imgAreaH - drawH) / 2;
+
+          ctx.drawImage(img, drawX, drawY, drawW, drawH);
+
+          // Caption strip
+          ctx.fillStyle = '#0d111a';
+          ctx.fillRect(x, y + imgAreaH, cardW, cardH - imgAreaH);
+
+          ctx.fillStyle = item.isOriginal ? '#94a3b8' : '#38bdf8';
+          ctx.font = 'bold 18px Inter, sans-serif';
+          const titleText = item.isOriginal ? 'Poto Asli' : `${item.label} (${item.age} taun)`;
+          ctx.fillText(titleText, x + 18, y + imgAreaH + 32);
+
+          ctx.fillStyle = '#cbd5e1';
+          ctx.font = '13px Inter, sans-serif';
+          ctx.fillText(item.isOriginal ? 'Idéntitas Rujukan' : 'Ciri Has Raray Kajaga', x + 18, y + imgAreaH + 54);
+        });
+
+        // Footer watermark
+        ctx.fillStyle = '#64748b';
+        ctx.font = '13px Inter, sans-serif';
+        ctx.fillText('Didamel nganggo Yuswa AI Studio • © made by farid ridwan 2026', padding, totalH - 16);
+
+        const collageUrl = canvas.toDataURL('image/png');
+        window.downloadDataUrl(collageUrl, 'Yuswa_AI_Kolase_Runtuyan_Yuswa.png');
+        showToast('Kolase Diunduh', 'Gambar kolase runtuyan yuswa parantos disimpen.', 'success');
+      } catch (err) {
+        console.error(err);
+        showToast('Gagal Ngadamel Kolase', 'Teu tiasa ngadamel kolase. Mangga unduh poto hiji-hiji.', 'error');
+      }
+    });
+  </script>
+</body>
+</html>
